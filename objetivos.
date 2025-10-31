@@ -1,0 +1,1193 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel Consolidado de Objetivos</title>
+    <!-- Carga de Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Babel para compilar JSX en el navegador -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <!-- Configuración de color y fuente de Tailwind -->
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f7f9fb;
+        }
+    </style>
+    <!-- Import Map para React (ESM) -->
+    <script type="importmap">
+{
+  "imports": {
+    "react": "https://esm.sh/react@18.2.0",
+    "react-dom/client": "https://esm.sh/react-dom@18.2.0/client",
+    "react/": "https://aistudiocdn.com/react@^19.2.0/",
+    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/"
+  }
+}
+</script>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel" data-type="module">
+        import React, { useState, useMemo } from 'react';
+        import ReactDOM from 'react-dom/client';
+
+        // --- INICIO: constants.ts ---
+        const AREAS_DATA = {
+            "Administración y Finanzas": {
+                collaborators: {
+                    "Sergio Benjamin de Santiago Serrano": {
+                        puesto: "Encargado de procesos contables",
+                        jefe: "Manuel Avelar",
+                        data: {
+                            "3er Trimestre 2025 (Jul-Sep)": {
+                                bono_100: 9000,
+                                calificacion_total: 0.80,
+                                monto_calificado: 7200,
+                                objetivos: [
+                                    { id: 13, objetivo: "Precierre de la Cuatro Compañías (Provein, Gluh, Mupa y Fenec)", medicion: "Elaboracion de Papeles de Trabajo para la prevision del Resultado Fiscal", soporte: "Entregar los papeles de Cierres fiscales", meta: "", resultado: "", valor_pct: 0.20, valor_100: 1800.00, valor_extra_pct: 0.24, valor_monto_total: 2160.00, acciones_supervision: "Trabajar con Manuel, Oscar y yo para la elaboracion del precierre y asi la empresa en base a los resultados pueda tomar decisiones.", acciones_120: "Entregar el dia 30 de Septiembre", calificacion_pct: 0.16, calificacion_monto: 1440.00 },
+                                    { id: 14, objetivo: "Revision de la correcta determinacion del IMSS e INFONAVIT", medicion: "Revision, determinacion y correccion de la cuota Obrero Patronal", soporte: "Entregar confrontas de las Cedulas y Emisiones determinadas por Mayra y las elaboradas por mi", meta: "", resultado: "", valor_pct: 0.20, valor_100: 1800.00, valor_extra_pct: 0.24, valor_monto_total: 2160.00, acciones_supervision: "Trabajar conjuntamente con Mayra la experta en Nominas e IMSS para poder establecer parametros y buscar las menores revisiones pora parte de la autoridad.", acciones_120: "Entregarlas a mas tardar el dia 12 de cada mes", calificacion_pct: 0.20, calificacion_monto: 1800.00 },
+                                    { id: 15, objetivo: "Cronograma de Obligaciones Fiscales de las Cuatro Compañías (Provein, Gluh, Mupa y Fenec)", medicion: "Elaboracion de Papel de trabajo para el correcto complimiento en tiempo de las obligaciones fiscales de las empresas", soporte: "Papeles de Trabajo", meta: "", resultado: "", valor_pct: 0.15, valor_100: 1350.00, valor_extra_pct: 0.18, valor_monto_total: 1620.00, acciones_supervision: "Trabajar conjuntamente con Manuel, para ver si se esta cumpliendo con los tiempos establecidos por la organización y las autoridades, para asi corregir y asu vez tomar medidas correctivas.", acciones_120: "Entregar los cronogramas de las empresas a mas tardar el dia 15 de Septiembre", calificacion_pct: 0.12, calificacion_monto: 1080.00 },
+                                    { id: 16, objetivo: "Revision, recalculo y de las operaciones en USD para la correcta determinacion de la fluctuacion cambiaria", medicion: "Elaboracion de Papeles de Trabajo para la correcta determinacion de la fluctuacion cambiaria", soporte: "Dejar registrado el costo correctamente a fin de Mes", meta: "", resultado: "", valor_pct: 0.20, valor_100: 1800.00, valor_extra_pct: 0.24, valor_monto_total: 2160.00, acciones_supervision: "-", acciones_120: "0", calificacion_pct: 0.16, calificacion_monto: 1440.00 },
+                                    { id: 17, objetivo: "Cuadrar los saldos intercompañias (Gluh - Provein, Gluh - Fenec, Gluh - Mupa)", medicion: "Revisar y cuadrar los saldos intercompañias", soporte: "Auxiliares Clientes - Proveedores - Acreedores de las compañias", meta: "", resultado: "", valor_pct: 0.20, valor_100: 1800.00, valor_extra_pct: 0.24, valor_monto_total: 2160.00, acciones_supervision: "Trabajo de Revision, depuracion y conciliacion entre Eli (provein) y Yo (Gluh, Mupa y Fenec) para tener contabilidades espejo", acciones_120: "Entregar los auxiliares intercompañias a mas tardar el dia 15 de septiembre", calificacion_pct: 0.16, calificacion_monto: 1440.00 },
+                                    { id: 18, objetivo: "Aperturar Registro Patronal en cada lugar donde Provein tenga presencia", medicion: "Elaborar un plan de trabajo, para poder integrar toda la documentacion requerida", soporte: "Entregar la documentacion de cada RP en su totalidad", meta: "", resultado: "", valor_pct: 0.05, valor_100: 450.00, valor_extra_pct: 0.06, valor_monto_total: 540.00, acciones_supervision: "Trabajar conjuntamente con Mayra para poder obtener los registros patronales correspondientes de Provein", acciones_120: "Entregar el 30 de Septiembre", calificacion_pct: 0.0, calificacion_monto: 0.0 }
+                                ]
+                            },
+                            "4to Trimestre 2025 (Oct-Dic)": {
+                                bono_100: 9000,
+                                calificacion_total: 0,
+                                monto_calificado: 0,
+                                objetivos: [
+                                    { id: 19, objetivo: "Pre cierre fiscal 2025, determinando ISR + PTU", medicion: "Elaboracion de papel de trabajo de prevision de cierre al 30 noviembre de 2025.", soporte: "Papel de trabajo de previsión de cierre", meta: "", resultado: "", valor_pct: 0.30, valor_100: 2700.00, valor_extra_pct: 0.36, valor_monto_total: 3240.00, acciones_supervision: "Revisar papel de trabajo y junta semanal de pre cierre", acciones_120: "Entregar el dia 15 de novimebre" },
+                                    { id: 20, objetivo: "Determinar saldos correctos, conciliados con Proveedor, del 100% de cuentas por pagar a en Provein + Gluh.", medicion: "Reporte de conciliacion con saldos identicos internos / externos", soporte: "Estado de cuenta y reporte de antigüedad de saldo", meta: "", resultado: "", valor_pct: 0.20, valor_100: 1800.00, valor_extra_pct: 0.24, valor_monto_total: 2160.00, acciones_supervision: "Reportes de antigüedad de saldos vs estado de cuenta del proveedor (comercial - contabilidad)", acciones_120: "Entregar el dia 30 de novimebre" },
+                                    { id: 21, objetivo: "Determinar saldos correctos, conciliados con Cliente, del 100% de cuentas por pagar a en Provein + Gluh.", medicion: "Reporte de conciliacion con saldos identicos internos / externos", soporte: "Estado de cuenta y reporte de antigüedad de saldo", meta: "", resultado: "", valor_pct: 0.20, valor_100: 1800.00, valor_extra_pct: 0.24, valor_monto_total: 2160.00, acciones_supervision: "Reportes de antigüedad de saldos vs estado de cuenta del proveedor (comercial - contabilidad)", acciones_120: "Entregar el dia 30 de novimebre" },
+                                    { id: 22, objetivo: "Iniciar plataforma para nueva base de datos en sistema contpaq", medicion: "Crear base de datos para las empresas y Provein + Gluh, con nuevo catalogo de cuentas", soporte: "Base de datos nueva, para iniciar contabilidad en 2026", meta: "", resultado: "", valor_pct: 0.20, valor_100: 1800.00, valor_extra_pct: 0.24, valor_monto_total: 2160.00, acciones_supervision: "Deseñar plan de cuentas y sistema de contabilización por metodo de inventarios perpetuos", acciones_120: "Entregar el dia 15 de diciembre" },
+                                    { id: 23, objetivo: "Apoyar en inventarios de cierre anual", medicion: "Cierre contable de inventario anual", soporte: "Documentos de conteo para cierre anual", meta: "", resultado: "", valor_pct: 0.10, valor_100: 900.00, valor_extra_pct: 0.12, valor_monto_total: 1080.00, acciones_supervision: "Corteo de inventarios sin diferencias", acciones_120: "No aplica" }
+                                ]
+                            }
+                        }
+                    },
+                    "Claudia Guerrero Angulo": {
+                        puesto: "Cuentas por cobrar y pagar",
+                        jefe: "N/A",
+                        data: {
+                            "3er Trimestre 2025 (Jul-Sep)": {
+                                bono_100: 6000,
+                                calificacion_total: 0.82,
+                                monto_calificado: 4920,
+                                objetivos: [
+                                    { id: 24, objetivo: "Conciliacion de Choctaw Mexico y Choctaw EUA cuadradar saldos", medicion: "Que contemos con los saldos cuadrados de las cuentas por pagar a mas tardar el dia 30 Agosto", soporte: "Estados de cuenta", meta: "", resultado: "", valor_pct: 0.30, valor_100: 1800.00, valor_extra_pct: 0.36, valor_monto_total: 2160.00, acciones_supervision: "", acciones_120: "A mas tardar el 29 de Agosto", calificacion_pct: 0.24, calificacion_monto: 1440.00 },
+                                    { id: 25, objetivo: "Conciliacion intercompañia Provein - Gluh, Comercial y Contabilidad", medicion: "Que contemos con los saldos cuadrados a mas tardar el dia 30 septiembre", soporte: "Reporte de saldos Comercial y Contabilidad", meta: "", resultado: "", valor_pct: 0.30, valor_100: 1800.00, valor_extra_pct: 0.36, valor_monto_total: 2160.00, acciones_supervision: "", acciones_120: "A mas tardar el 29 de Septiembre", calificacion_pct: 0.24, calificacion_monto: 1440.00 },
+                                    { id: 26, objetivo: "Saldar todos los anticipos de los clientes Grupo Co Tailor, Rhino y Choctaw, contar con la cociliacion contra contabilidad y comercial", medicion: "Que contemos con los saldos cuadrados a mas tardar el dia 30 septiembre", soporte: "Reporte de saldos Comercial y Contabilidad", meta: "", resultado: "", valor_pct: 0.30, valor_100: 1800.00, valor_extra_pct: 0.36, valor_monto_total: 2160.00, acciones_supervision: "", acciones_120: "A mas tardar el 29 de Septiembre", calificacion_pct: 0.24, calificacion_monto: 1440.00 },
+                                    { id: 27, objetivo: "Entregar los registros de ingresos y egresos cada semana y a mas tardar el dia 5 de cada mes", medicion: "correos de envio de auxiliares cada semana y antes del dia 5 de cada mes", soporte: "Correos con fecha marcada", meta: "", resultado: "", valor_pct: 0.10, valor_100: 600.00, valor_extra_pct: 0.12, valor_monto_total: 720.00, acciones_supervision: "", acciones_120: "A mas tardar el 4 de cada mes", calificacion_pct: 0.10, calificacion_monto: 600.00 }
+                                ]
+                            },
+                            "4to Trimestre 2025 (Oct-Dic)": {
+                                bono_100: 6000,
+                                calificacion_total: 0,
+                                monto_calificado: 0,
+                                objetivos: [
+                                    { id: 28, objetivo: "Determinar saldos correctos, conciliados con Proveedor, del 100% de cuentas por pagar a en Provein + Gluh.", medicion: "Reporte de conciliación con saldos identicos internos / externos", soporte: "Estado de cuenta y reporte de antigüedad de saldo", meta: "", resultado: "", valor_pct: 0.30, valor_100: 1800.00, valor_extra_pct: 0.36, valor_monto_total: 2160.00, acciones_supervision: "", acciones_120: "" },
+                                    { id: 29, objetivo: "Determinar saldos correctos, conciliados con Cliente, del 100% de cuentas por cobrar en Provein + Gluh.", medicion: "Reporte de conciliación con saldos identicos internos / externos", soporte: "Estado de cuenta y reporte de antigüedad de saldo", meta: "", resultado: "", valor_pct: 0.30, valor_100: 1800.00, valor_extra_pct: 0.36, valor_monto_total: 2160.00, acciones_supervision: "", acciones_120: "" },
+                                    { id: 30, objetivo: "Manter cobranza con efectividad del 90%", medicion: "Evitar saldos mayores de vencimiento de 45 días", soporte: "Reporte de antigüedad de saldos", meta: "", resultado: "", valor_pct: 0.30, valor_100: 1800.00, valor_extra_pct: 0.36, valor_monto_total: 2160.00, acciones_supervision: "", acciones_120: "" },
+                                    { id: 31, objetivo: "Entregar registros de ingresos y egresos cada semana y a más tardar el día 05 de cada mes", medicion: "Correos de envio de auxiliares de cada seman y antes del día 5 de cada mes", soporte: "Correos con fecha marcada", meta: "", resultado: "", valor_pct: 0.10, valor_100: 600.00, valor_extra_pct: 0.12, valor_monto_total: 720.00, acciones_supervision: "", acciones_120: "" }
+                                ]
+                            }
+                        }
+                    },
+                    "Elizabeth Inocencia Alarcón Mendoza": {
+                        puesto: "Tesorería",
+                        jefe: "N/A",
+                        data: {
+                            "3er Trimestre 2025 (Jul-Sep)": {
+                                bono_100: 4500,
+                                calificacion_total: 0.80,
+                                monto_calificado: 3600,
+                                objetivos: [
+                                    { id: 32, objetivo: "ENVIAR DIARIAMENTE LOS SALDOS DE BANCOS E INVERSIONES A LOS DIRECTORES", medicion: "Semanal", soporte: "Correo electronico", meta: "", resultado: "", valor_pct: 0.05, valor_100: 225.00, valor_extra_pct: 0.06, valor_monto_total: 270.00, acciones_supervision: "Calculo mensual", acciones_120: "", calificacion_pct: 0.04, calificacion_monto: 180.00 },
+                                    { id: 33, objetivo: "ENVIAR COMPROBANTES DE PAGO A PROVEEDORES", medicion: "Semanal", soporte: "Correo electronico / drive / whats app", meta: "", resultado: "", valor_pct: 0.05, valor_100: 225.00, valor_extra_pct: 0.06, valor_monto_total: 270.00, acciones_supervision: "Revision mensual", acciones_120: "", calificacion_pct: 0.04, calificacion_monto: 180.00 },
+                                    { id: 34, objetivo: "ELABORAR Y ACTUALIZAR EL FLUJO DE INGRESOS Y MENSUAL en sistema Contpaq", medicion: "Mensual", soporte: "Reporte compras, mensual", meta: "", resultado: "", valor_pct: 0.25, valor_100: 1125.00, valor_extra_pct: 0.30, valor_monto_total: 1350.00, acciones_supervision: "Cierre mensual", acciones_120: "", calificacion_pct: 0.20, calificacion_monto: 900.00 },
+                                    { id: 35, objetivo: "Capacitación a elementos nuevos en sistema comercial, bancos y contpaq", medicion: "Semanal", soporte: "Disminución de errores del personal nuevo", meta: "", resultado: "", valor_pct: 0.05, valor_100: 225.00, valor_extra_pct: 0.06, valor_monto_total: 270.00, acciones_supervision: "Independencia de los elementos nuevos en sus labores cotidianas", acciones_120: "", calificacion_pct: 0.04, calificacion_monto: 180.00 },
+                                    { id: 36, objetivo: "Control y administración de pagos fijos", medicion: "Mensual", soporte: "Evitar vencimientos de servicios básicos y proveedores estrategicos", meta: "", resultado: "", valor_pct: 0.30, valor_100: 1350.00, valor_extra_pct: 0.36, valor_monto_total: 1620.00, acciones_supervision: "Cero vencimientos de pagos de servicios", acciones_120: "", calificacion_pct: 0.24, calificacion_monto: 1080.00 },
+                                    { id: 37, objetivo: "Contabilidad FENEC SAPI de CV", medicion: "Mensual", soporte: "Cierre mensual contable", meta: "", resultado: "", valor_pct: 0.30, valor_100: 1350.00, valor_extra_pct: 0.36, valor_monto_total: 1620.00, acciones_supervision: "Cierre mensual contable", acciones_120: "", calificacion_pct: 0.24, calificacion_monto: 1080.00 }
+                                ]
+                            },
+                            "4to Trimestre 2025 (Oct-Dic)": {
+                                bono_100: 4500,
+                                calificacion_total: 0,
+                                monto_calificado: 0,
+                                objetivos: [
+                                    { id: 38, objetivo: "Determinar saldos correctos, conciliados con Proveedor, del 100% de cuentas por pagar a en Provein + Gluh.", medicion: "Reporte de conciliación con saldos idénticos internos / externos", soporte: "Estado de cuenta y reporte de antigüedad de saldo", meta: "", resultado: "", valor_pct: 0.25, valor_100: 1125.00, valor_extra_pct: 0.30, valor_monto_total: 1350.00, acciones_supervision: "Reporte de conciliación de CxP", acciones_120: "" },
+                                    { id: 39, objetivo: "Determinar saldos correctos, conciliados con Cliente, del 100% de cuentas por cobrar en Provein + Gluh.", medicion: "Reporte de conciliación con saldos idénticos internos / externos", soporte: "Estado de cuenta y reporte de antigüedad de saldo", meta: "", resultado: "", valor_pct: 0.25, valor_100: 1125.00, valor_extra_pct: 0.30, valor_monto_total: 1350.00, acciones_supervision: "Reporte de conciliación de CxC", acciones_120: "" },
+                                    { id: 40, objetivo: "Manter cobranza con efectividad del 90%", medicion: "Evitar saldos mayores de vencimiento de 45 días", soporte: "Reporte de antigüedad de saldos", meta: "", resultado: "", valor_pct: 0.25, valor_100: 1125.00, valor_extra_pct: 0.30, valor_monto_total: 1350.00, acciones_supervision: "Reporte de antigüedad de saldos", acciones_120: "" },
+                                    { id: 41, objetivo: "Reporte de flujo de efectivo mensualizado, previsión 3 meses", medicion: "Entrega de reporte de flujo de efectivo mensual, proyectado a 3 meses", soporte: "Reporte de flujo de efectivo", meta: "", resultado: "", valor_pct: 0.10, valor_100: 450.00, valor_extra_pct: 0.12, valor_monto_total: 540.00, acciones_supervision: "Reporte de flujo de efectivo proyectado", acciones_120: "" },
+                                    { id: 42, objetivo: "Control y administración de pagos fijos", medicion: "Mensual", soporte: "Evitar vencimientos de servicios básicos y proveedores estrategicos", meta: "", resultado: "", valor_pct: 0.10, valor_100: 450.00, valor_extra_pct: 0.12, valor_monto_total: 540.00, acciones_supervision: "Cero vencimientos de pagos de servicios", acciones_120: "" },
+                                    { id: 43, objetivo: "Administración y control de documentación jurídica (actas, poderes, facturas de vehículo)", medicion: "Siempre", soporte: "Control de documentación jurídica", meta: "", resultado: "", valor_pct: 0.05, valor_100: 225.00, valor_extra_pct: 0.06, valor_monto_total: 270.00, acciones_supervision: "Archivo de control", acciones_120: "" }
+                                ]
+                            }
+                        }
+                    },
+                }
+            },
+            "Recursos Humanos": {
+                collaborators: {
+                    "Rosalinda Álvarez Díaz": {
+                        puesto: "RH",
+                        jefe: "Manuel Avelar",
+                        data: {
+                            "3er Trimestre 2025 (Jul-Sep)": {
+                                bono_100: 7500,
+                                calificacion_total: 1.20,
+                                monto_calificado: 9000,
+                                objetivos: [
+                                    { id: 1, objetivo: "Capital humano - Vacantes", medicion: "Días promedio de contratación", soporte: "Implementar proceso estandarizado", meta: "21 días", resultado: "10 días promedio", valor_pct: 0.10, valor_100: 1250.00, valor_extra_pct: 0.12, valor_monto_total: 1500.00, acciones_supervision: "N/A", acciones_120: "Promedio de menos de 15 días en contratación", calificacion_pct: 0.12, calificacion_monto: 1500.00 },
+                                    { id: 2, objetivo: "Cumplimiento legal - Expedientes completos", medicion: "Expedientes completos / empleados", soporte: "Auditoría interna y digitalización de expedientes", meta: "100% expedientes", resultado: "Finalizado antes del 15", valor_pct: 0.15, valor_100: 1125.00, valor_extra_pct: 0.18, valor_monto_total: 1350.00, acciones_supervision: "N/A", acciones_120: "Finalizar todos antes del 15-sept", calificacion_pct: 0.18, calificacion_monto: 1350.00 },
+                                    { id: 3, objetivo: "Automatización - Interfaz RH y DO", medicion: "3 módulos", soporte: "Formularios, automatización con Apps Script y carpetas", meta: "3 digitales", resultado: "Automatización generada", valor_pct: 0.20, valor_100: 1500.00, valor_extra_pct: 0.24, valor_monto_total: 1800.00, acciones_supervision: "N/A", acciones_120: "Automatización + generación de QR antes de septiembre", calificacion_pct: 0.24, calificacion_monto: 1800.00 },
+                                    { id: 4, objetivo: "Legal/documental - Pack legal completo", medicion: "Documentos firmados / 5", soporte: "Crear: aviso de privacidad, confidencialidad, etc.", meta: "100% de reglamento", resultado: "Integración generada", valor_pct: 0.15, valor_100: 1125.00, valor_extra_pct: 0.18, valor_monto_total: 1350.00, acciones_supervision: "N/A", acciones_120: "Integración automática en expediente digital", calificacion_pct: 0.18, calificacion_monto: 1350.00 },
+                                    { id: 5, objetivo: "Clima y compromiso - Encuesta eNPS y clima laboral", medicion: "Encuestas aplicadas / empleados", soporte: "Aplicar vía Forms, análisis y difusión de resultados", meta: "90% resultados", resultado: "Aplicado antes del 1ro de si", valor_pct: 0.15, valor_100: 1000.00, valor_extra_pct: 0.18, valor_monto_total: 1200.00, acciones_supervision: "N/A", acciones_120: "Aplicar antes del 1 de septiembre", calificacion_pct: 0.18, calificacion_monto: 1200.00 },
+                                    { id: 6, objetivo: "Normativa STPS - Aplicación Guías NOM-035", medicion: "Guías aplicadas / empleados", soporte: "Aplicar Guía I (empresa) y Guía II (empleado) vía Forms", meta: "90% centralizar resultados", resultado: "Consolidado en septiembre", valor_pct: 0.10, valor_100: 750.00, valor_extra_pct: 0.12, valor_monto_total: 900.00, acciones_supervision: "N/A", acciones_120: "Aplicar y consolidar en septiembre", calificacion_pct: 0.12, calificacion_monto: 900.00 },
+                                    { id: 7, objetivo: "Cumplimiento legal - Expedientes digitales completos", medicion: "Expedientes completos / total empleados", soporte: "Revisión y escaneo de documentos, checklist", meta: "100% Drive ordenado", resultado: "Completados antes del 25 d", valor_pct: 0.15, valor_100: 750.00, valor_extra_pct: 0.18, valor_monto_total: 900.00, acciones_supervision: "N/A", acciones_120: "Completar expedientes faltantes antes del 25-sep", calificacion_pct: 0.18, calificacion_monto: 900.00 }
+                                ]
+                            },
+                            "4to Trimestre 2025 (Oct-Dic)": {
+                                bono_100: 7500,
+                                calificacion_total: 0,
+                                monto_calificado: 0,
+                                objetivos: [
+                                    { id: 8, objetivo: "Atracción de Talento - Control de TPC en Vacantes Críticas.", medicion: "Tiempo promedio de cobertura en vacantes", soporte: "Implementar un sistema de seguimiento semanal con líderes y mantener el TPC bajo el límite establecido.", meta: "", resultado: "", valor_pct: 0.20, valor_100: 1500, valor_extra_pct: 0.24, valor_monto_total: 1800, acciones_supervision: "N/A", acciones_120: "Mantener el TPC en 12 días (superando el límite de control) Y lograr un 95% de Fit Cultural en las nuevas contrataciones (validado a 90 días)." },
+                                    { id: 9, objetivo: "Alineación Estratégica - DNC Realizada y Alineada", medicion: "Realizar el programas de capacitación basados en un objetivo estratégico de negocio (validación gerencial).", soporte: "Documentar la DNC enfocada en las 3 prioridades estratégicas (ej. $$/%/$ Reducción de Costos) y obtener la firma del Gerente de Área.", meta: "", resultado: "", valor_pct: 0.20, valor_100: 1500, valor_extra_pct: 0.24, valor_monto_total: 1800, acciones_supervision: "N/A", acciones_120: "Obtener la validación y aprobación formal de la Dirección General o VoBo de que la DNC." },
+                                    { id: 10, objetivo: "Gestión del Desempeño - Medición de Objetivos Nivel 3", medicion: "Establecer objetivos de aprendizaje de Nivel 3 (Comportamiento) formalmente definidos.", soporte: "Definir objetivos de comportamiento claros para el $100\\%$ de los programas de desarrollo y diseñar su instrumento de medición.", meta: "", resultado: "", valor_pct: 0.20, valor_100: 1500, valor_extra_pct: 0.24, valor_monto_total: 1800, acciones_supervision: "N/A", acciones_120: "Implementar un ciclo formal de Coaching/Feedback (30, 60, 90 días) con los jefes directos del grupo piloto para reforzar y documentar el cambio de Nivel 3." },
+                                    { id: 11, objetivo: "Gestión de la Calidad - Programa Diseñado y Validado", medicion: "Diseño y presentación del programa de capacitación anual 2026", soporte: "Entregar y obtener la aprobación final de la Gerencia para el Plan Anual de Capacitación a tiempo y sin cambios de última hora.", meta: "", resultado: "", valor_pct: 0.20, valor_100: 1500, valor_extra_pct: 0.24, valor_monto_total: 1800, acciones_supervision: "N/A", acciones_120: "Entregar la totalidad del Plan Anual de Capacitación con fechas de implementación." },
+                                    { id: 12, objetivo: "Cumplimiento Normativo - Registro de Reglamento Interior", medicion: "Estatus de inscripción del Reglamento Interior de Trabajo (RIT)", soporte: "Elaborar, obtener aprobación legal y registrar el RIT ante la autoridad laboral competente.", meta: "", resultado: "", valor_pct: 0.20, valor_100: 1500, valor_extra_pct: 0.24, valor_monto_total: 1800, acciones_supervision: "N/A", acciones_120: "Capacitar al 100% del personal en el nuevo RIT y obtener acuse de recepción firmado (digital o físico) para reducir el riesgo de multas." }
+                                ]
+                            }
+                        }
+                    }
+                }
+            },
+            "Sistemas": {
+                collaborators: {
+                    "Carlos Eduardo Alvarado Fajardo": {
+                        puesto: "Sistemas",
+                        jefe: "Manuel Avelar",
+                        data: {
+                            "3er Trimestre 2025 (Jul-Sep)": {
+                                bono_100: 3000,
+                                calificacion_total: 0.80,
+                                monto_calificado: 2400,
+                                objetivos: [
+                                    { id: 44, objetivo: "CURSO DE POWER BI", medicion: "TOMAR LAS 21 SESIONES", soporte: "Bajo anotaciones, videos de repaso y certificado compartido con Ruben Torres", meta: "", resultado: "", valor_pct: 0.10, valor_100: 300.00, valor_extra_pct: 0.12, valor_monto_total: 360.00, acciones_supervision: "MANUEL GERENTE ADMINISTRATIVO", acciones_120: "Inicio del curso 11/08/2025 y fin del curso 22/08/2025", calificacion_pct: 0.0, calificacion_monto: 0.00 },
+                                    { id: 45, objetivo: "Servidor de Google Cloud", medicion: "Hacer que nuestro servidor sea mas eficiente y seguro. Buscar tener mas beneficios a un costo bajo.", soporte: "Contrato con los agentes de Google Cloud", meta: "", resultado: "", valor_pct: 0.10, valor_100: 300.00, valor_extra_pct: 0.12, valor_monto_total: 360.00, acciones_supervision: "MANUEL GERENTE ADMINISTRATIVO", acciones_120: "Tener contrato de Google Cloud Enterprise el 08/08/2025", calificacion_pct: 0.05, calificacion_monto: 150.00 },
+                                    { id: 46, objetivo: "Whatsapp Bussines", medicion: "Hacer que no tengamos que gastar mas por lineas telefónicas y empezar a implemetar el whatsapp bussines. (Objetivo compartido con Abigal Cruz).", soporte: "En agosto tiene que estar implementado en todo provein el whatsapp bussines", meta: "", resultado: "", valor_pct: 0.20, valor_100: 600.00, valor_extra_pct: 0.24, valor_monto_total: 720.00, acciones_supervision: "MANUEL GERENTE ADMINISTRATIVO", acciones_120: "La implementacion de whatsapp bussines estará para el dia 18/08/2025", calificacion_pct: 0.15, calificacion_monto: 450.00 },
+                                    { id: 47, objetivo: "Internet Nuevo", medicion: "Buscar un mejor proveedor de internet para un mejor servicio y calidad que el que actualmente tenemos.", soporte: "Cambio de proveedor listo para septiembre", meta: "", resultado: "", valor_pct: 0.30, valor_100: 900.00, valor_extra_pct: 0.36, valor_monto_total: 1080.00, acciones_supervision: "MANUEL GERENTE ADMINISTRATIVO", acciones_120: "El cambio de internet estará para el 19/09/2025", calificacion_pct: 0.30, calificacion_monto: 900.00 },
+                                    { id: 48, objetivo: "Crear sistema de ticket para servicio", medicion: "Formato de responsivas, mantenimiento, fallas e inventario automatizado y actualizado automaticamente", soporte: "Implementar formatos automatizados para todo el equipo tecnológico, para que sea medible y tomar acción mas eficientemente.", meta: "", resultado: "", valor_pct: 0.30, valor_100: 900.00, valor_extra_pct: 0.36, valor_monto_total: 1080.00, acciones_supervision: "MANUEL GERENTE ADMINISTRATIVO", acciones_120: "El formato estará listo el dia 18/09/2025", calificacion_pct: 0.30, calificacion_monto: 900.00 }
+                                ]
+                            },
+                            "4to Trimestre 2025 (Oct-Dic)": {
+                                bono_100: 3000,
+                                calificacion_total: 0,
+                                monto_calificado: 0,
+                                objetivos: [
+                                    { id: 49, objetivo: "Exponer a productivo, previamente validada el sistema de ticket para servicio de usuarios TI", medicion: "Capacitar a usuarios Provein y Gluh, sobre herramienta de ticket de TI", soporte: "Plataforma de ticket TI", meta: "", resultado: "", valor_pct: 0.25, valor_100: 750.00, valor_extra_pct: 0.30, valor_monto_total: 900.00, acciones_supervision: "Revisión periodica de sistema de ticket", acciones_120: "Listo para el día 07 de noviembre de 2025." },
+                                    { id: 50, objetivo: "Diseño de arquitectura de Firewall", medicion: "I. Evaluación y planificación. II. Adquisición e implementación III Configuración de reglas y pruebas", soporte: "Implementación de sistema firewall", meta: "", resultado: "", valor_pct: 0.25, valor_100: 750.00, valor_extra_pct: 0.30, valor_monto_total: 900.00, acciones_supervision: "Implementación de fire wall", acciones_120: "No aplica" },
+                                    { id: 51, objetivo: "Protocolo para entrega de información y contraseñas de sistemas de TI", medicion: "Todo el personal debe tener firmado su responsiva de usuario y contraseña", soporte: "Formato con peso juridico para protección de la iformación del la empresa", meta: "", resultado: "", valor_pct: 0.25, valor_100: 750.00, valor_extra_pct: 0.30, valor_monto_total: 900.00, acciones_supervision: "Formato firmado", acciones_120: "Listo para el día 13 de noviembre de 2025." },
+                                    { id: 52, objetivo: "Diseñar sistema de encriptación de contraseñas", medicion: "Sistema de encriptación de contraseñas", soporte: "Sistema de contraseñas", meta: "", resultado: "", valor_pct: 0.25, valor_100: 750.00, valor_extra_pct: 0.30, valor_monto_total: 900.00, acciones_supervision: "Sistema de encriptamiento y uso de contraseña", acciones_120: "No aplica" }
+                                ]
+                            }
+                        }
+                    }
+                }
+            }
+        };
+        // --- FIN: constants.ts ---
+
+
+        // --- INICIO: components/icons.tsx ---
+        const BuildingOfficeIcon = ({ className }) => (
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className={className}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 21h16.5M4.5 3h15M5.25 3v18m13.5-18v18M9 6.75h6M9 11.25h6m-6 4.5h6M6.75 21v-2.25a2.25 2.25 0 012.25-2.25h6a2.25 2.25 0 012.25 2.25V21" />
+          </svg>
+        );
+        const PlusIcon = ({ className }) => (
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className={className}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+            </svg>
+        );
+        // --- FIN: components/icons.tsx ---
+
+
+        // --- INICIO: Funciones de formato ---
+        const formatCurrency = (amount) => {
+            return new Intl.NumberFormat('es-MX', { style: 'currency', currency: 'MXN', minimumFractionDigits: 2 }).format(amount);
+        };
+
+        const formatPercent = (value, minDigits = 0) => {
+            return new Intl.NumberFormat('es-MX', { style: 'percent', minimumFractionDigits: minDigits, maximumFractionDigits: 2 }).format(value);
+        };
+        // --- FIN: Funciones de formato ---
+
+
+        // --- INICIO: components/ProgressBar.tsx ---
+        const OverallProgress = ({ quarterData }) => {
+            const totalScorePercent = quarterData?.calificacion_total || 0;
+            const progressValue = Math.min(totalScorePercent * 100, 120);
+
+            let progressColorClass = 'bg-red-500';
+            if (totalScorePercent > 1.0) {
+                progressColorClass = 'bg-blue-600';
+            } else if (totalScorePercent >= 1.0) {
+                progressColorClass = 'bg-green-600';
+            } else if (totalScorePercent >= 0.8) {
+                progressColorClass = 'bg-yellow-500';
+            }
+            
+            return (
+                <div className="mt-8">
+                     <h2 className="text-xl font-bold text-gray-700 mb-2">Progreso General del Bono</h2>
+                     <div className="h-2 rounded-lg bg-gray-200 overflow-hidden">
+                        <div 
+                            className={`h-2 rounded-lg transition-all duration-500 ease-in-out ${progressColorClass}`}
+                            style={{ width: `${progressValue}%` }}>
+                        </div>
+                     </div>
+                     <p className="text-right text-sm font-semibold text-gray-600 mt-1">
+                        Calificación Total: {formatPercent(totalScorePercent, 2)}
+                     </p>
+                </div>
+            );
+        };
+        // --- FIN: components/ProgressBar.tsx ---
+        
+        // --- INICIO: components/Modal.tsx ---
+        const Modal = ({ isOpen, onClose, title, children }) => {
+            if (!isOpen) return null;
+
+            return (
+                <div className="fixed inset-0 bg-gray-600 bg-opacity-75 overflow-y-auto h-full w-full flex items-center justify-center z-50" id="my-modal">
+                    <div className="relative mx-auto p-5 border w-full max-w-2xl shadow-lg rounded-xl bg-white">
+                        <div className="mt-3 text-center">
+                             <h3 className="text-2xl leading-6 font-bold text-gray-900 mb-4 pb-4 border-b">{title}</h3>
+                            <div className="mt-2 px-7 py-3">
+                                {children}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+        // --- FIN: components/Modal.tsx ---
+        
+        // --- INICIO: components/AddQuarterModal.tsx ---
+        const AddQuarterModal = ({ isOpen, onClose, onSave, nextQuarterName }) => {
+            const [bono, setBono] = useState('');
+            
+            const handleSubmit = (e) => {
+                e.preventDefault();
+                if (nextQuarterName && bono > 0) {
+                    onSave(parseFloat(bono));
+                    setBono('');
+                    onClose();
+                } else {
+                    alert('Por favor, ingrese un monto de bono válido.');
+                }
+            };
+
+            return (
+                <Modal isOpen={isOpen} onClose={onClose} title="Añadir Nuevo Trimestre Global">
+                    <form onSubmit={handleSubmit} className="space-y-6 text-left">
+                        <div>
+                            <label htmlFor="quarterName" className="block text-sm font-medium text-gray-700">Nombre del Trimestre</label>
+                            <input
+                                type="text"
+                                id="quarterName"
+                                value={nextQuarterName || 'Calculando...'}
+                                readOnly
+                                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm bg-gray-100 cursor-not-allowed"
+                            />
+                            <p className="mt-2 text-sm text-gray-500">El nombre del siguiente trimestre se genera automáticamente.</p>
+                        </div>
+                        <div>
+                             <label htmlFor="bono" className="block text-sm font-medium text-gray-700">Bono Meta (100%) para todos los colaboradores</label>
+                             <input
+                                type="number"
+                                id="bono"
+                                value={bono}
+                                onChange={(e) => setBono(e.target.value)}
+                                placeholder="Ej: 10000"
+                                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                required
+                            />
+                        </div>
+                        <div className="items-center px-4 py-3 flex justify-end gap-x-2">
+                             <button
+                                type="button"
+                                onClick={onClose}
+                                className="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 text-base font-medium"
+                            >
+                                Cancelar
+                            </button>
+                            <button
+                                type="submit"
+                                className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 text-base font-medium"
+                            >
+                                Guardar Trimestre
+                            </button>
+                        </div>
+                    </form>
+                </Modal>
+            );
+        };
+        // --- FIN: components/AddQuarterModal.tsx ---
+        
+        // --- INICIO: components/AddObjectiveModal.tsx ---
+        const AddObjectiveModal = ({ isOpen, onClose, onSave, quarterData }) => {
+            const [objective, setObjective] = useState({
+                objetivo: '', medicion: '', soporte: '', meta: '', valor_pct: 0, acciones_supervision: '', acciones_120: ''
+            });
+            
+            const currentTotalPct = useMemo(() => {
+                if (!quarterData || !quarterData.objetivos) return 0;
+                return quarterData.objetivos.reduce((sum, obj) => sum + obj.valor_pct, 0);
+            }, [quarterData]);
+
+            const handleChange = (e) => {
+                const { name, value, type } = e.target;
+                setObjective(prev => ({ ...prev, [name]: type === 'number' ? parseFloat(value) / 100 : value }));
+            };
+
+            const handleSubmit = (e) => {
+                e.preventDefault();
+                if (objective.objetivo && objective.medicion && objective.valor_pct > 0) {
+                    onSave(objective);
+                    // Reset form
+                    setObjective({ objetivo: '', medicion: '', soporte: '', meta: '', valor_pct: 0, acciones_supervision: '', acciones_120: '' });
+                    onClose();
+                } else {
+                    alert('Por favor, complete los campos obligatorios: Objetivo, Medición y Valor %.');
+                }
+            };
+            
+            return (
+                <Modal isOpen={isOpen} onClose={onClose} title="Añadir Nuevo Objetivo">
+                    <form onSubmit={handleSubmit} className="space-y-4 text-left">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div className="md:col-span-2">
+                                <label className="block text-sm font-medium text-gray-700">Objetivo</label>
+                                <textarea name="objetivo" value={objective.objetivo} onChange={handleChange} required className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" rows="2"></textarea>
+                            </div>
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700">Medición</label>
+                                <textarea name="medicion" value={objective.medicion} onChange={handleChange} required className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" rows="2"></textarea>
+                            </div>
+                             <div>
+                                <label className="block text-sm font-medium text-gray-700">Soporte</label>
+                                <textarea name="soporte" value={objective.soporte} onChange={handleChange} className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" rows="2"></textarea>
+                            </div>
+                             <div>
+                                <label className="block text-sm font-medium text-gray-700">Meta</label>
+                                <input type="text" name="meta" value={objective.meta} onChange={handleChange} className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" />
+                            </div>
+                             <div>
+                                <label className="block text-sm font-medium text-gray-700">Valor %</label>
+                                <input type="number" name="valor_pct" value={objective.valor_pct * 100} onChange={handleChange} required className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" />
+                                {quarterData && (
+                                    <p className="mt-2 text-sm text-gray-500">
+                                        Suma actual de objetivos: <span className="font-bold">{formatPercent(currentTotalPct, 2)}</span>.
+                                        Restante: <span className="font-bold">{formatPercent(1 - currentTotalPct, 2)}</span>.
+                                    </p>
+                                )}
+                            </div>
+                             <div className="md:col-span-2">
+                                <label className="block text-sm font-medium text-gray-700">Acciones de Supervisión</label>
+                                <textarea name="acciones_supervision" value={objective.acciones_supervision} onChange={handleChange} className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" rows="2"></textarea>
+                            </div>
+                             <div className="md:col-span-2">
+                                <label className="block text-sm font-medium text-gray-700">Acciones para cumplir el 120%</label>
+                                <textarea name="acciones_120" value={objective.acciones_120} onChange={handleChange} className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" rows="2"></textarea>
+                            </div>
+                        </div>
+                        <div className="items-center px-4 py-3 flex justify-end gap-x-2">
+                            <button type="button" onClick={onClose} className="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 text-base font-medium">Cancelar</button>
+                            <button type="submit" className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 text-base font-medium">Guardar Objetivo</button>
+                        </div>
+                    </form>
+                </Modal>
+            );
+        };
+        // --- FIN: components/AddObjectiveModal.tsx ---
+
+
+        // --- INICIO: components/AreaList.tsx (ahora FilterControls) ---
+        const FilterControls = ({
+            area,
+            selectedCollaborator,
+            selectedQuarter,
+            onCollaboratorChange,
+            onQuarterChange
+        }) => {
+            const collaboratorNames = Object.keys(area.collaborators);
+            const availableQuarters = selectedCollaborator ? Object.keys(area.collaborators[selectedCollaborator].data) : [];
+
+            return (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                    <div>
+                        <label htmlFor="colaborador-select" className="block text-sm font-medium text-gray-700 mb-1">Colaborador</label>
+                        <select
+                            id="colaborador-select"
+                            value={selectedCollaborator || ''}
+                            onChange={(e) => onCollaboratorChange(e.target.value)}
+                            className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-lg shadow-sm"
+                        >
+                            <option value="" disabled>Seleccione un colaborador</option>
+                            {collaboratorNames.map(name => (
+                                <option key={name} value={name}>{name}</option>
+                            ))}
+                        </select>
+                    </div>
+                    <div className="flex items-end gap-2">
+                        <div className="flex-grow">
+                            <label htmlFor="trimestre-select" className="block text-sm font-medium text-gray-700 mb-1">Trimestre</label>
+                            <select
+                                id="trimestre-select"
+                                value={selectedQuarter || ''}
+                                onChange={(e) => onQuarterChange(e.target.value)}
+                                disabled={!selectedCollaborator}
+                                className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-lg shadow-sm"
+                            >
+                                <option value="" disabled>Seleccione un trimestre</option>
+                                {availableQuarters.map(quarter => (
+                                    <option key={quarter} value={quarter}>{quarter}</option>
+                                ))}
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+        // --- FIN: components/AreaList.tsx ---
+
+
+        // --- INICIO: components/CollaboratorList.tsx (ahora AreaList) ---
+        const AreaList = ({ data, onAreaSelect }) => {
+            const areaNames = Object.keys(data);
+
+            const getLatestScore = (collaboratorData) => {
+                const data = collaboratorData.data;
+                const quarters = Object.keys(data);
+                
+                const sortedQuarters = quarters.sort((a, b) => {
+                    const getQuarterNumber = (q) => {
+                         const match = q.match(/\\d+/);
+                         return match ? parseInt(match[0], 10) : 0;
+                    }
+                    const getYear = (q) => {
+                         const match = q.match(/\\d{4}/);
+                         return match ? parseInt(match[0], 10) : 0;
+                    }
+                    
+                    const yearA = getYear(a);
+                    const yearB = getYear(b);
+                    if(yearA !== yearB) return yearB - yearA;
+
+                    const qA = getQuarterNumber(a);
+                    const qB = getQuarterNumber(b);
+                    return qB - qA;
+                });
+                
+                for (const q of sortedQuarters) {
+                    if (data[q].calificacion_total > 0) {
+                        return data[q];
+                    }
+                }
+                
+                const firstQuarterKey = sortedQuarters[0] || Object.keys(data)[0];
+                return data[firstQuarterKey] || { calificacion_total: 0 };
+            };
+
+            const calculateAreaAverage = (area) => {
+                const collaborators = Object.values(area.collaborators);
+                if (collaborators.length === 0) return 0;
+
+                const totalScore = collaborators.reduce((sum, collaborator) => {
+                    const latestData = getLatestScore(collaborator);
+                    return sum + (latestData?.calificacion_total || 0);
+                }, 0);
+
+                return totalScore / collaborators.length;
+            };
+
+            return (
+                <div className="mb-8">
+                    <h2 className="text-xl font-bold text-gray-700 mb-4">Resumen por Área</h2>
+                    <div id="resumen-areas" className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                        {areaNames.map(name => {
+                            const area = data[name];
+                            const averageScore = calculateAreaAverage(area);
+                            const collaboratorCount = Object.keys(area.collaborators).length;
+
+                            let scoreColor = 'text-gray-900';
+                            let borderColor = 'border-gray-300';
+
+                            if (averageScore > 1.0) {
+                                scoreColor = 'text-blue-600';
+                                borderColor = 'border-blue-500';
+                            } else if (averageScore >= 0.8) {
+                                scoreColor = 'text-green-600';
+                                borderColor = 'border-green-500';
+                            } else if (averageScore > 0) {
+                                scoreColor = 'text-yellow-600';
+                                borderColor = 'border-yellow-500';
+                            } else {
+                                scoreColor = 'text-red-600';
+                                borderColor = 'border-red-500';
+                            }
+
+                            return (
+                                <div key={name} onClick={() => onAreaSelect(name)} className={`bg-white p-4 rounded-xl shadow border-l-4 ${borderColor} transform transition duration-300 hover:scale-[1.03] hover:shadow-lg cursor-pointer flex items-start space-x-4`}>
+                                    <div className="flex-shrink-0">
+                                        <BuildingOfficeIcon className="h-10 w-10 text-indigo-500" />
+                                    </div>
+                                    <div>
+                                        <p className="text-lg font-bold text-gray-800 truncate">{name}</p>
+                                        <p className="text-sm font-medium text-gray-500">{collaboratorCount} {collaboratorCount === 1 ? 'colaborador' : 'colaboradores'}</p>
+                                        <p className={`text-2xl font-bold ${scoreColor} mt-1`}>{formatPercent(averageScore, 2)}</p>
+                                        <p className="text-xs font-light text-gray-400">Promedio de área (últ. trim.)</p>
+                                    </div>
+                                </div>
+                            );
+                        })}
+                    </div>
+                </div>
+            );
+        };
+        // --- FIN: components/CollaboratorList.tsx ---
+
+
+        // --- INICIO: components/OkrDetails.tsx ---
+        const ResultsPanel = ({ 
+            collaborator, 
+            quarterData, 
+            collaboratorName,
+            selectedQuarter,
+            onObjectiveUpdate,
+            onResultUpdate,
+            onOpenAddObjectiveModal
+        }) => {
+
+            if (!collaborator || !quarterData || !collaboratorName || !selectedQuarter) {
+                return (
+                    <div className="border border-gray-200 rounded-xl p-6 bg-gray-50">
+                         <p id="mensaje-inicial" className="text-center text-gray-500 mt-6 text-lg">
+                            Selecciona un colaborador y un trimestre para ver su rendimiento.
+                        </p>
+                    </div>
+                )
+            }
+            
+            const scoreClass = quarterData.calificacion_total > 1.0 ? 'text-blue-600 bg-blue-100' : (quarterData.calificacion_total >= 1.0 ? 'text-green-600 bg-green-100' : 'text-yellow-600 bg-yellow-100');
+            
+            const totalValorPct = quarterData.objetivos.reduce((sum, obj) => sum + obj.valor_pct, 0);
+            const isSumCorrect = Math.abs(totalValorPct - 1.0) < 0.001;
+            const totalCalificacionPct = quarterData.objetivos.reduce((sum, obj) => sum + (obj.calificacion_pct || 0), 0);
+
+            return (
+                <div id="resultado-panel" className="border border-gray-200 rounded-xl p-6 bg-gray-50 transition-all duration-300">
+                    <div id="info-general" className="mb-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 text-center">
+                        <div className="bg-white p-4 rounded-xl shadow border-l-4 border-indigo-500">
+                            <p className="text-sm font-medium text-gray-500">Colaborador</p>
+                            <p className="text-lg font-semibold text-gray-900">{collaboratorName}</p>
+                        </div>
+                        <div className="bg-white p-4 rounded-xl shadow border-l-4 border-indigo-500">
+                            <p className="text-sm font-medium text-gray-500">Puesto</p>
+                            <p className="text-lg font-semibold text-gray-900">{collaborator.puesto}</p>
+                        </div>
+                        <div className="bg-white p-4 rounded-xl shadow border-l-4 border-indigo-500">
+                            <p className="text-sm font-medium text-gray-500">Bono Meta (100%)</p>
+                            <p className="text-lg font-semibold text-green-600">{formatCurrency(quarterData.bono_100)}</p>
+                        </div>
+                        <div className="bg-white p-4 rounded-xl shadow border-l-4 border-indigo-500">
+                            <p className="text-sm font-medium text-gray-500">Monto Calificado</p>
+                            <p className={`text-lg font-semibold ${quarterData.calificacion_total > 1.0 ? 'text-blue-600' : (quarterData.calificacion_total >= 0.8 ? 'text-green-600' : (quarterData.calificacion_total > 0 ? 'text-yellow-600' : 'text-red-600'))}`}>
+                                {formatCurrency(quarterData.monto_calificado)}
+                            </p>
+                        </div>
+                    </div>
+
+                    <div className="flex justify-between items-center mb-4 border-t pt-4">
+                        <h2 className="text-xl font-bold text-gray-700">Detalle de Objetivos</h2>
+                        {quarterData.objetivos.length > 0 && (
+                            !isSumCorrect ? (
+                                <div className="px-3 py-1 text-sm font-semibold text-yellow-800 bg-yellow-100 rounded-full flex items-center gap-2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.21 3.03-1.742 3.03H4.42c-1.532 0-2.492-1.696-1.742-3.03l5.58-9.92zM10 13a1 1 0 110-2 1 1 0 010 2zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" /></svg>
+                                    <span>Suma de Valores: <strong>{formatPercent(totalValorPct, 2)}</strong>. Debe ser 100%.</span>
+                                </div>
+                            ) : (
+                                <div className="px-3 py-1 text-sm font-semibold text-green-800 bg-green-100 rounded-full flex items-center gap-2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" /></svg>
+                                    <span>Suma de Valores correcta (100%).</span>
+                                </div>
+                            )
+                        )}
+                    </div>
+                    <div className="overflow-x-auto">
+                        <table className="min-w-full divide-y divide-gray-200 table-fixed">
+                            <thead className="bg-indigo-50">
+                                <tr>
+                                    <th scope="col" rowSpan={2} className="w-10 px-2 py-2 text-left text-xs font-semibold text-indigo-700 uppercase tracking-wider align-bottom">#</th>
+                                    <th scope="col" rowSpan={2} className="w-52 px-2 py-2 text-left text-xs font-semibold text-indigo-700 uppercase tracking-wider align-bottom">Objetivo</th>
+                                    <th scope="col" rowSpan={2} className="w-52 px-2 py-2 text-left text-xs font-semibold text-indigo-700 uppercase tracking-wider align-bottom">Medición</th>
+                                    <th scope="col" rowSpan={2} className="w-48 px-2 py-2 text-left text-xs font-semibold text-indigo-700 uppercase tracking-wider align-bottom">Soporte</th>
+                                    <th scope="col" rowSpan={2} className="w-40 px-2 py-2 text-left text-xs font-semibold text-indigo-700 uppercase tracking-wider align-bottom">Meta</th>
+                                    <th scope="col" colSpan={4} className="px-2 py-2 text-center text-xs font-bold text-white uppercase tracking-wider bg-indigo-500">Valor</th>
+                                    <th scope="col" rowSpan={2} className="w-52 px-2 py-2 text-left text-xs font-semibold text-indigo-700 uppercase tracking-wider align-bottom">Acciones de Supervisión</th>
+                                    <th scope="col" rowSpan={2} className="w-52 px-2 py-2 text-left text-xs font-semibold text-indigo-700 uppercase tracking-wider align-bottom">Acciones para cumplir el 120%</th>
+                                    <th scope="col" colSpan={3} className="px-2 py-2 text-center text-xs font-bold text-white uppercase tracking-wider bg-green-600">Calificación</th>
+                                </tr>
+                                <tr>
+                                    <th scope="col" className="w-16 px-2 py-2 text-left text-xs font-semibold text-indigo-700 uppercase tracking-wider">%</th>
+                                    <th scope="col" className="w-24 px-2 py-2 text-left text-xs font-semibold text-indigo-700 uppercase tracking-wider">100%</th>
+                                    <th scope="col" className="w-24 px-2 py-2 text-left text-xs font-semibold text-indigo-700 uppercase tracking-wider">Extra +20%</th>
+                                    <th scope="col" className="w-24 px-2 py-2 text-left text-xs font-semibold text-indigo-700 uppercase tracking-wider">Monto</th>
+                                    <th scope="col" className="w-48 px-2 py-2 text-left text-xs font-semibold text-indigo-700 uppercase tracking-wider">Resultado</th>
+                                    <th scope="col" className="w-20 px-2 py-2 text-left text-xs font-semibold text-indigo-700 uppercase tracking-wider">%</th>
+                                    <th scope="col" className="w-24 px-2 py-2 text-left text-xs font-semibold text-indigo-700 uppercase tracking-wider">Monto</th>
+                                </tr>
+                            </thead>
+                            <tbody className="bg-white divide-y divide-gray-200">
+                                {quarterData.objetivos.length > 0 ? quarterData.objetivos.map((obj, index) => (
+                                    <tr key={obj.id} className="hover:bg-gray-50">
+                                        <td className="px-2 py-2 whitespace-nowrap text-xs text-gray-700 font-semibold align-top">{index + 1}</td>
+                                        <td className="px-2 py-2 text-xs text-gray-700 break-words align-top">{obj.objetivo}</td>
+                                        <td className="px-2 py-2 text-xs text-gray-500 break-words align-top">{obj.medicion}</td>
+                                        <td className="px-2 py-2 text-xs text-gray-500 break-words align-top">{obj.soporte}</td>
+                                        <td className="px-2 py-2 text-xs text-gray-500 break-words align-top">{obj.meta || ''}</td>
+                                        <td className="px-2 py-2 whitespace-nowrap text-xs text-gray-500 bg-gray-50 align-top">{formatPercent(obj.valor_pct)}</td>
+                                        <td className="px-2 py-2 whitespace-nowrap text-xs text-gray-500 bg-gray-50 align-top">{formatCurrency(obj.valor_100)}</td>
+                                        <td className="px-2 py-2 whitespace-nowrap text-xs text-gray-500 bg-gray-50 align-top">{formatPercent(obj.valor_extra_pct)}</td>
+                                        <td className="px-2 py-2 whitespace-nowrap text-xs font-semibold text-gray-800 bg-gray-50 align-top">{formatCurrency(obj.valor_monto_total)}</td>
+                                        <td className="px-2 py-2 text-xs text-gray-500 break-words align-top">{obj.acciones_supervision}</td>
+                                        <td className="px-2 py-2 text-xs text-gray-500 break-words align-top">{obj.acciones_120}</td>
+                                        <td className="px-2 py-2 text-xs text-gray-500 bg-green-50 align-top">
+                                            <input
+                                                type="text"
+                                                value={obj.resultado || ''}
+                                                onChange={(e) => onResultUpdate(collaboratorName, selectedQuarter, obj.id, e.target.value)}
+                                                className="w-full p-1 bg-white border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 text-xs"
+                                                aria-label={`Resultado para ${obj.objetivo}`}
+                                            />
+                                        </td>
+                                        <td className="px-2 py-2 whitespace-nowrap text-xs font-semibold bg-green-50 align-top">
+                                             <input
+                                                type="number"
+                                                value={obj.calificacion_pct != null ? Math.round(obj.calificacion_pct * 100) : ''}
+                                                onChange={(e) => {
+                                                    const value = e.target.value;
+                                                    const newPct = value === '' ? null : parseFloat(value) / 100;
+                                                    onObjectiveUpdate(collaboratorName, selectedQuarter, obj.id, newPct);
+                                                }}
+                                                className="w-20 p-1 text-center bg-white border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 text-xs"
+                                                aria-label={`Calificación porcentaje para ${obj.objetivo}`}
+                                            />
+                                        </td>
+                                        <td className="px-2 py-2 whitespace-nowrap text-xs font-bold text-green-700 bg-green-50 align-top">
+                                             {obj.calificacion_monto != null ? formatCurrency(obj.calificacion_monto) : '-'}
+                                        </td>
+                                    </tr>
+                                )) : (
+                                    <tr>
+                                        <td colSpan="15" className="text-center py-10 text-gray-500">
+                                            No hay objetivos definidos para este trimestre.
+                                        </td>
+                                    </tr>
+                                )}
+                            </tbody>
+                            <tfoot className="bg-gray-100 border-t-2 border-indigo-200">
+                                 <tr>
+                                    <td colSpan={5} className="px-2 py-2 text-left text-xs font-bold text-gray-800">TOTALES</td>
+                                    <td className={`px-2 py-2 whitespace-nowrap text-xs font-bold ${!isSumCorrect ? 'text-red-600' : 'text-gray-800'}`}>{formatPercent(totalValorPct)}</td>
+                                    <td className="px-2 py-2 whitespace-nowrap text-xs font-bold text-gray-800">{formatCurrency(quarterData.bono_100)}</td>
+                                    <td className="px-2 py-2 whitespace-nowrap text-xs font-bold text-gray-800">{formatPercent(totalValorPct * 1.2)}</td>
+                                    <td className="px-2 py-2 whitespace-nowrap text-xs font-bold text-gray-800">{formatCurrency(quarterData.bono_100 * 1.2)}</td>
+                                    <td colSpan={2}></td>
+                                    <td></td>
+                                    <td className="px-2 py-2 whitespace-nowrap text-xs font-bold">
+                                       <span className={`px-2 inline-flex text-xs leading-5 font-bold rounded-full ${scoreClass}`}>
+                                            {formatPercent(totalCalificacionPct, 2)}
+                                       </span>
+                                    </td>
+                                    <td className="px-2 py-2 whitespace-nowrap text-xs font-bold text-gray-800">{formatCurrency(quarterData.monto_calificado)}</td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                     <div className="mt-6 flex justify-end">
+                        <button
+                            onClick={onOpenAddObjectiveModal}
+                            className="px-4 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors flex items-center gap-2 text-sm font-medium"
+                        >
+                            <PlusIcon className="h-5 w-5" />
+                            Añadir Objetivo
+                        </button>
+                    </div>
+                </div>
+            );
+        }
+        // --- FIN: components/OkrDetails.tsx ---
+
+
+        // --- INICIO: components/BonusSummary.tsx ---
+        const BonusSummary = ({ data, onCollaboratorSelect, onOpenAddQuarterModal }) => {
+            const allQuarters = useMemo(() => {
+                const quarters = new Set();
+                Object.values(data).forEach(area => {
+                    Object.values(area.collaborators).forEach(collaborator => {
+                        Object.keys(collaborator.data).forEach(quarter => {
+                            quarters.add(quarter);
+                        });
+                    });
+                });
+                return Array.from(quarters).sort();
+            }, [data]);
+
+            const defaultQuarter = useMemo(() => {
+                let latestQuarterWithData = '';
+                let maxYear = 0;
+                let maxQuarterNum = 0;
+
+                const getQuarterNumber = (q) => {
+                    const match = q.match(/\\d+/);
+                    return match ? parseInt(match[0], 10) : 0;
+                };
+                const getYear = (q) => {
+                    const match = q.match(/\\d{4}/);
+                    return match ? parseInt(match[0], 10) : 0;
+                };
+
+                allQuarters.forEach(quarter => {
+                    const hasData = Object.values(data).some(area => 
+                        Object.values(area.collaborators).some(c => 
+                            c.data[quarter]?.monto_calificado > 0
+                        )
+                    );
+
+                    if (hasData) {
+                        const year = getYear(quarter);
+                        const qNum = getQuarterNumber(quarter);
+                        if (year > maxYear || (year === maxYear && qNum > maxQuarterNum)) {
+                            maxYear = year;
+                            maxQuarterNum = qNum;
+                            latestQuarterWithData = quarter;
+                        }
+                    }
+                });
+                return latestQuarterWithData || allQuarters[0] || '';
+            }, [data, allQuarters]);
+            
+            const [selectedSummaryQuarter, setSelectedSummaryQuarter] = useState(defaultQuarter);
+
+            const summaryData = useMemo(() => {
+                if (!selectedSummaryQuarter) return [];
+                const flattenedData = [];
+                Object.entries(data).forEach(([areaName, area]) => {
+                    Object.entries(area.collaborators).forEach(([collaboratorName, collaborator]) => {
+                        const quarterData = collaborator.data[selectedSummaryQuarter];
+                        if (quarterData && quarterData.monto_calificado > 0) {
+                            flattenedData.push({
+                                name: collaboratorName,
+                                area: areaName,
+                                puesto: collaborator.puesto,
+                                bono: quarterData.monto_calificado,
+                            });
+                        }
+                    });
+                });
+                return flattenedData.sort((a, b) => b.bono - a.bono);
+            }, [data, selectedSummaryQuarter]);
+
+            const totalBonus = summaryData.reduce((sum, item) => sum + item.bono, 0);
+
+            return (
+                <div className="mb-10 bg-gray-50 p-6 rounded-xl border border-gray-200">
+                    <div className="flex flex-col sm:flex-row justify-between sm:items-center mb-4 gap-4">
+                         <div className="flex items-center gap-4">
+                            <h2 className="text-xl font-bold text-gray-700">Resumen de Bonos a Pagar</h2>
+                            <button
+                                onClick={onOpenAddQuarterModal}
+                                className="flex-shrink-0 px-3 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors flex items-center gap-1 text-sm font-medium"
+                                title="Añadir Nuevo Trimestre para todos"
+                            >
+                                <PlusIcon className="h-4 w-4" />
+                                Nuevo Trimestre
+                            </button>
+                        </div>
+                         <div>
+                            <label htmlFor="summary-quarter-select" className="sr-only">
+                                Seleccionar Trimestre
+                            </label>
+                            <select
+                                id="summary-quarter-select"
+                                value={selectedSummaryQuarter}
+                                onChange={(e) => setSelectedSummaryQuarter(e.target.value)}
+                                className="mt-1 block w-full sm:w-auto pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-lg shadow-sm"
+                            >
+                                {allQuarters.map(quarter => (
+                                    <option key={quarter} value={quarter}>{quarter}</option>
+                                ))}
+                            </select>
+                        </div>
+                    </div>
+                   
+                    <div className="overflow-x-auto">
+                        <table className="min-w-full divide-y divide-gray-200">
+                            <thead className="bg-indigo-50">
+                                <tr>
+                                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-indigo-700 uppercase tracking-wider">Colaborador</th>
+                                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-indigo-700 uppercase tracking-wider">Área</th>
+                                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-indigo-700 uppercase tracking-wider">Puesto</th>
+                                    <th scope="col" className="px-6 py-3 text-right text-xs font-medium text-indigo-700 uppercase tracking-wider">Monto del Bono</th>
+                                </tr>
+                            </thead>
+                            <tbody className="bg-white divide-y divide-gray-200">
+                                {summaryData.length > 0 ? summaryData.map((item, index) => (
+                                    <tr key={index} className="hover:bg-gray-50">
+                                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                                            <button 
+                                                onClick={() => onCollaboratorSelect(item.area, item.name, selectedSummaryQuarter)}
+                                                className="text-left hover:text-indigo-600 focus:outline-none focus:underline transition-colors duration-200"
+                                            >
+                                                {item.name}
+                                            </button>
+                                        </td>
+                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.area}</td>
+                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.puesto}</td>
+                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-right font-semibold text-green-600">{formatCurrency(item.bono)}</td>
+                                    </tr>
+                                )) : (
+                                   <tr>
+                                        <td colSpan="4" className="px-6 py-4 text-center text-sm text-gray-500">
+                                            No hay bonos registrados para este trimestre.
+                                        </td>
+                                   </tr>
+                                )}
+                            </tbody>
+                            <tfoot className="bg-gray-100">
+                                <tr>
+                                    <td colSpan="3" className="px-6 py-3 text-right text-sm font-bold text-gray-800 uppercase">Total a Pagar</td>
+                                    <td className="px-6 py-3 text-right text-lg font-extrabold text-indigo-700">{formatCurrency(totalBonus)}</td>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+            );
+        };
+        // --- FIN: components/BonusSummary.tsx ---
+
+
+        // --- INICIO: App.tsx (Componente Principal) ---
+        const App = () => {
+            const [data, setData] = useState(AREAS_DATA);
+            const [selectedArea, setSelectedArea] = useState(null);
+            const [selectedCollaborator, setSelectedCollaborator] = useState(null);
+            const [selectedQuarter, setSelectedQuarter] = useState(null);
+            const [isAddQuarterModalOpen, setIsAddQuarterModalOpen] = useState(false);
+            const [isAddObjectiveModalOpen, setIsAddObjectiveModalOpen] = useState(false);
+
+            const allQuarters = useMemo(() => {
+                const quarters = new Set();
+                Object.values(data).forEach(area => {
+                    Object.values(area.collaborators).forEach(collaborator => {
+                        Object.keys(collaborator.data).forEach(quarter => {
+                            quarters.add(quarter);
+                        });
+                    });
+                });
+                return Array.from(quarters);
+            }, [data]);
+            
+            const generateNextQuarterName = (quarters) => {
+                const currentYear = new Date().getFullYear();
+                if (quarters.length === 0) {
+                    return `1er Trimestre ${currentYear} (Ene-Mar)`;
+                }
+
+                const sortedQuarters = [...quarters].sort((a, b) => {
+                    const yearA = parseInt(a.match(/(\\d{4})/)?.[1] || '0', 10);
+                    const yearB = parseInt(b.match(/(\\d{4})/)?.[1] || '0', 10);
+                    if (yearA !== yearB) return yearB - yearA;
+                    
+                    const quarterA = parseInt(a.match(/(\\d)/)?.[1] || '0', 10);
+                    const quarterB = parseInt(b.match(/(\\d)/)?.[1] || '0', 10);
+                    return quarterB - quarterA;
+                });
+
+                const latestQuarterString = sortedQuarters[0];
+                const latestYear = parseInt(latestQuarterString.match(/(\\d{4})/)?.[1] || '0', 10);
+                const latestQuarterNum = parseInt(latestQuarterString.match(/(\\d)/)?.[1] || '0', 10);
+
+                let nextQuarterNum = latestQuarterNum + 1;
+                let nextYear = latestYear;
+
+                if (nextQuarterNum > 4) {
+                    nextQuarterNum = 1;
+                    nextYear++;
+                }
+
+                const details = {
+                    1: { name: "1er Trimestre", months: "(Ene-Mar)" },
+                    2: { name: "2do Trimestre", months: "(Abr-Jun)" },
+                    3: { name: "3er Trimestre", months: "(Jul-Sep)" },
+                    4: { name: "4to Trimestre", months: "(Oct-Dic)" },
+                };
+                
+                return `${details[nextQuarterNum].name} ${nextYear} ${details[nextQuarterNum].months}`;
+            };
+
+            const nextQuarterName = useMemo(() => generateNextQuarterName(allQuarters), [allQuarters]);
+
+            const handleAreaSelect = (name) => {
+                setSelectedArea(name);
+                setSelectedCollaborator(null); 
+                setSelectedQuarter(null);
+            };
+            
+            const handleCollaboratorSelectFromSummary = (areaName, collaboratorName, quarterName) => {
+                setSelectedArea(areaName);
+                setSelectedCollaborator(collaboratorName);
+                setSelectedQuarter(quarterName);
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            };
+
+            const handleCollaboratorChange = (name) => {
+                setSelectedCollaborator(name);
+                setSelectedQuarter(null); 
+            };
+
+            const handleQuarterChange = (quarter) => {
+                setSelectedQuarter(quarter);
+            };
+            
+            const handleAddNewQuarter = (bono) => {
+                 const newData = JSON.parse(JSON.stringify(data));
+        
+                if (allQuarters.includes(nextQuarterName)) {
+                    alert('Este trimestre ya existe.');
+                    return;
+                }
+
+                Object.keys(newData).forEach(areaName => {
+                    const area = newData[areaName];
+                    Object.keys(area.collaborators).forEach(collaboratorName => {
+                        const collaborator = area.collaborators[collaboratorName];
+                        collaborator.data[nextQuarterName] = {
+                            bono_100: bono,
+                            calificacion_total: 0,
+                            monto_calificado: 0,
+                            objetivos: []
+                        };
+                    });
+                });
+
+                setData(newData);
+            };
+
+            const handleAddNewObjective = (objectiveData) => {
+                if (!selectedArea || !selectedCollaborator || !selectedQuarter) return;
+
+                const newData = JSON.parse(JSON.stringify(data));
+                const quarter = newData[selectedArea].collaborators[selectedCollaborator].data[selectedQuarter];
+
+                const maxId = Object.values(newData).flatMap(area => 
+                    Object.values(area.collaborators).flatMap(c => 
+                        Object.values(c.data).flatMap(q => q.objetivos.map(o => o.id))
+                    )
+                ).reduce((max, id) => Math.max(max, id), 0);
+
+                const valor100 = quarter.bono_100 * objectiveData.valor_pct;
+
+                const newObjective = {
+                    ...objectiveData,
+                    id: maxId + 1,
+                    resultado: '',
+                    valor_100: valor100,
+                    valor_extra_pct: objectiveData.valor_pct * 1.2,
+                    valor_monto_total: valor100 * 1.2,
+                    calificacion_pct: 0,
+                    calificacion_monto: 0,
+                };
+
+                quarter.objetivos.push(newObjective);
+                setData(newData);
+            };
+            
+            const handleObjectiveUpdate = (
+                collaboratorName,
+                quarterName,
+                objectiveId,
+                newPctValue
+            ) => {
+                if (!selectedArea) return;
+
+                const newData = JSON.parse(JSON.stringify(data));
+                
+                const areaData = newData[selectedArea];
+                const collaborator = areaData.collaborators[collaboratorName];
+                const quarterData = collaborator.data[quarterName];
+                const objective = quarterData.objetivos.find(o => o.id === objectiveId);
+
+                if (objective) {
+                    objective.calificacion_pct = newPctValue;
+                    if (newPctValue !== null) {
+                        const baseAmount = objective.valor_100;
+                        const basePct = objective.valor_pct;
+                        objective.calificacion_monto = basePct > 0 ? (newPctValue / basePct) * baseAmount : 0;
+                    } else {
+                        objective.calificacion_monto = 0;
+                    }
+                }
+
+                quarterData.calificacion_total = quarterData.objetivos.reduce(
+                    (sum, obj) => sum + (obj.calificacion_pct || 0), 0
+                );
+                quarterData.monto_calificado = quarterData.objetivos.reduce(
+                    (sum, obj) => sum + (obj.calificacion_monto || 0), 0
+                );
+                
+                setData(newData);
+            };
+
+            const handleResultUpdate = (
+                collaboratorName,
+                quarterName,
+                objectiveId,
+                newResultText
+            ) => {
+                if (!selectedArea) return;
+
+                const newData = JSON.parse(JSON.stringify(data));
+                
+                const areaData = newData[selectedArea];
+                const collaborator = areaData.collaborators[collaboratorName];
+                const quarterData = collaborator.data[quarterName];
+                const objective = quarterData.objetivos.find(o => o.id === objectiveId);
+
+                if (objective) {
+                    objective.resultado = newResultText;
+                }
+                
+                setData(newData);
+            };
+            
+            const clearSelection = () => {
+                setSelectedArea(null);
+                setSelectedCollaborator(null);
+                setSelectedQuarter(null);
+            }
+
+            const currentAreaData = useMemo(() => {
+                if (!selectedArea) return null;
+                return data[selectedArea];
+            }, [selectedArea, data]);
+
+            const currentCollaboratorData = useMemo(() => {
+                if (!currentAreaData || !selectedCollaborator) return null;
+                return currentAreaData.collaborators[selectedCollaborator];
+            }, [currentAreaData, selectedCollaborator]);
+
+            const currentQuarterData = useMemo(() => {
+                if (!currentCollaboratorData || !selectedQuarter) return null;
+                return currentCollaboratorData.data[selectedQuarter];
+            }, [currentCollaboratorData, selectedQuarter]);
+
+            return (
+                <div className="p-4 sm:p-8">
+                    <div className="max-w-screen-2xl mx-auto bg-white shadow-xl rounded-2xl p-6 md:p-10">
+                        <header className="mb-8 border-b pb-4">
+                            <h1 className="text-3xl font-extrabold text-gray-900 mb-1">
+                                <span className="text-indigo-600">Gestión de Objetivos</span> por Área
+                            </h1>
+                            <p className="text-gray-500">Datos consolidados de rendimiento por área, colaborador y período.</p>
+                        </header>
+                        
+                        {!selectedArea ? (
+                            <>
+                                <BonusSummary data={data} onCollaboratorSelect={handleCollaboratorSelectFromSummary} onOpenAddQuarterModal={() => setIsAddQuarterModalOpen(true)} />
+                                <AreaList data={data} onAreaSelect={handleAreaSelect} />
+                            </>
+                        ) : (
+                            <section>
+                                 <div className="flex justify-between items-center mb-4 border-t pt-4">
+                                    <h2 className="text-2xl font-bold text-gray-800">
+                                        Área: <span className="text-indigo-600">{selectedArea}</span>
+                                    </h2>
+                                    <button 
+                                        onClick={clearSelection}
+                                        className="px-4 py-2 text-sm font-medium text-indigo-600 bg-indigo-100 rounded-lg hover:bg-indigo-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors"
+                                    >
+                                        ← Volver a Áreas
+                                    </button>
+                                </div>
+
+                                <FilterControls
+                                    area={currentAreaData}
+                                    selectedCollaborator={selectedCollaborator}
+                                    selectedQuarter={selectedQuarter}
+                                    onCollaboratorChange={handleCollaboratorChange}
+                                    onQuarterChange={handleQuarterChange}
+                                />
+                                
+                                <ResultsPanel 
+                                    collaborator={currentCollaboratorData}
+                                    quarterData={currentQuarterData}
+                                    collaboratorName={selectedCollaborator}
+                                    selectedQuarter={selectedQuarter}
+                                    onObjectiveUpdate={handleObjectiveUpdate}
+                                    onResultUpdate={handleResultUpdate}
+                                    onOpenAddObjectiveModal={() => setIsAddObjectiveModalOpen(true)}
+                                />
+                                
+                                {currentQuarterData && <OverallProgress quarterData={currentQuarterData} />}
+                            </section>
+                        )}
+                        
+                        <AddQuarterModal 
+                            isOpen={isAddQuarterModalOpen} 
+                            onClose={() => setIsAddQuarterModalOpen(false)}
+                            onSave={handleAddNewQuarter}
+                            nextQuarterName={nextQuarterName}
+                        />
+                        
+                        <AddObjectiveModal
+                            isOpen={isAddObjectiveModalOpen}
+                            onClose={() => setIsAddObjectiveModalOpen(false)}
+                            onSave={handleAddNewObjective}
+                            quarterData={currentQuarterData}
+                        />
+
+                    </div>
+                </div>
+            );
+        };
+        // --- FIN: App.tsx ---
+
+
+        // --- INICIO: index.tsx (Render) ---
+        const rootElement = document.getElementById('root');
+        if (!rootElement) {
+          throw new Error("No se pudo encontrar el elemento raíz para montar la aplicación.");
+        }
+
+        const root = ReactDOM.createRoot(rootElement);
+        root.render(
+          <React.StrictMode>
+            <App />
+          </React.StrictMode>
+        );
+        // --- FIN: index.tsx ---
+
+    </script>
+</body>
+</html>
